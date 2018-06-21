@@ -18,13 +18,13 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    
     User
         .findOne({ where: { email: req.body.email } })
         .then((user) => {
             if (user) {
-                bcrypt.compare(req.body.password,user.password, (err, matches) => {
+                bcrypt.compare(req.body.password, user.password, (err, matches) => {
                     if (matches) { res.status(200).json({user, token: createToken(user)}) }
+                    
                     else { res.status(401).json({ error: 'not Auth' }) }
                 })
             } else {
