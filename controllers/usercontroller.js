@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
 const createToken = (user) => {
-    return jwt.sign({ email: user.email }, 'secret', {expiresIn: 60*60*24})
+    return jwt.sign({ email: user.email }, process.env.JWT_SECRET, {expiresIn: 60*60*24})
 }
 
 router.post('/signup', (req, res) => {
@@ -24,7 +24,6 @@ router.post('/login', (req, res) => {
             if (user) {
                 bcrypt.compare(req.body.password, user.password, (err, matches) => {
                     if (matches) { res.status(200).json({user, token: createToken(user)}) }
-                    
                     else { res.status(401).json({ error: 'not Auth' }) }
                 })
             } else {
