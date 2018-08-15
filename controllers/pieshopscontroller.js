@@ -1,16 +1,15 @@
 const router = require('express').Router();
-const sequelize = require('../db'); 
-const PieShop = sequelize.import('../models/pieshop');
 const validateSession = require('../middleware/validate-session');
+const PieShopService = require('../service/pieshop.service');
 
 router.get('/', (req, res) => {
-    PieShop.findAll()
+   pieShopService().getAllPieShop()
         .then(shops => res.status(200).json(shops))
         .catch(err => res.status(500).json(err))
 })
 
 router.post('/', validateSession, (req, res) => {
-    PieShop.create({
+    const pso= {
         shop_name: req.body.name, 
         shop_description: req.body.description, 
         shop_street_address: req.body.street, 
@@ -21,9 +20,13 @@ router.post('/', validateSession, (req, res) => {
         shop_website: req.body.website, 
         shop_rating: req.body.rating,
         userId: req.user.id
-    })
-    .then(createdShop => res.status(200).json(createdShop))
-    .catch(err => res.status(500).json(err))
+    }
+    pieShopService().getAllPieShop(pso)
+        .then(createdShop => res.status(200).json(createdShop))
+        .catch(err => res.status(500).json(err))
 })
+
+const pieShopService = () => new PieShopService() 
+
 
 module.exports = router;

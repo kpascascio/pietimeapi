@@ -32,13 +32,6 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 isInt: true
             }
-        },
-        user_email: {
-            type: DataTypes.STRING,
-            unique: true,
-            validate: {
-                isEmail: true
-            }
         }
     })
 
