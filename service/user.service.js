@@ -8,37 +8,49 @@ class UserService {
     }
 
     async userCreate(userObj) {
-        const createdUser = await User.create({
-            first_name: userObj.firstName,
-            last_name: userObj.lastName,
-            email: userObj.email,
-            password: bcrypt.hashSync(userObj.password, 10)
-        })
-        const token = this._createToken(createdUser);
-
-        return {
-            createdUser,
-            token
-        };
+        try {
+            const createdUser = await User.create({
+                first_name: userObj.firstName,
+                last_name: userObj.lastName,
+                email: userObj.email,
+                password: bcrypt.hashSync(userObj.password, 10)
+            })
+            return {
+                createdUser,
+                token: this._createToken(createdUser)
+            };
+        } catch (e){
+            return {
+                error:true,
+                e: e.errors[0].message
+            }
+        }
     }
 
     async userLogin(userObj) {
-        const loggedInUser = await User.findOne({ where: { email: userObj.email } })
-        
-        const isUser = await bcrypt.compare(userObj.password, loggedInUser.password)
+        try {
+            const loggedInUser = await User.findOne({ where: { email: userObj.email } })
+            const isUser = await bcrypt.compare(userObj.password, loggedInUser.password)
 
-        if(isUser){
-            return {
-                loggedInUser,
-                error: false,
-                token: this._createToken(loggedInUser)
+            if(isUser){
+                return {
+                    loggedInUser,
+                    error: false,
+                    token: this._createToken(loggedInUser)
+                }
+            } else {
+                return {
+                    error: true,
+                    errorMsg: "Wrong username or password"
+                }
             }
-        } else {
+        } catch (e) {
             return {
                 error: true,
-                errorMsg: "not Auth"
+                errorMsg: "User doesn't exist"
             }
         }
+        
     }
 }
 
