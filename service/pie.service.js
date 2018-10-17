@@ -14,6 +14,10 @@ class PieService {
     createPie(pieobj){
         return Pie.create(pieobj)
     }
+
+    updatePie(pieDetailsToUpdate) {
+        return Pie.update(pieDetailsToUpdate,{ where:{id: pieDetailsToUpdate.id}})
+    }
 }
 
 module.exports = PieService;

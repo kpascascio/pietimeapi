@@ -34,6 +34,21 @@ router.get('/:name', (req, res) => {
         .catch(err => res.status(500).json({error: err}))
 })
 
+router.put('/:id', (req, res) => {
+    if (!req.errors){       
+        pieService().updatePie(req.body)
+        .then(pie => {
+            
+            console.log('here')
+            return res.status(200).json(pie)
+        })
+            .catch(err => res.json(req.errors))
+    } else {
+        res.status(500).json(req.errors)
+    }
+})
+
+
 const pieService = () => new PieService() 
 
 module.exports = router;
