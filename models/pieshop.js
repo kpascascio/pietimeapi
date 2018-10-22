@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         shop_rating: {
             type: DataTypes.INTEGER,
             defaultValue: 0
+        },
+        userId: {
+            type:DataTypes.UUID,
+            unique:true
         }
     })
 

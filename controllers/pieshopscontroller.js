@@ -19,10 +19,27 @@ router.post('/', validateSession, (req, res) => {
         shop_phone_number: req.body.phone, 
         shop_website: req.body.website, 
         shop_rating: req.body.rating,
-        userId: req.user.id
+        userId: req.user.uid,
+        
     }
-    pieShopService().getAllPieShop(pso)
+    pieShopService().createPieShop(pso)
         .then(createdShop => res.status(200).json(createdShop))
+        .catch(err => res.status(500).json(err))
+})
+
+router.get('/myshop', validateSession, (req,res) => {
+    pieShopService().getMyShop(req.user.uid)
+        .then(shop => res.status(200).json(shop))
+        .catch(err => res.status(500).json(err))
+})
+
+router.get('/myshop/:id/pies', validateSession, (req,res) => {
+   pieShopService().getShopPies(req.params.id) 
+        .then(shop => {
+            shop.getPies().then(
+                (pies) => res.status(200).json(pies)
+            )
+        })
         .catch(err => res.status(500).json(err))
 })
 

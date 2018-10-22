@@ -17,7 +17,7 @@ router.post('/', validateSession, (req, res) => {
             time_to_bake: req.body.timeToBake, 
             servings: req.body.servings, 
             rating: req.body.rating, 
-            userId: req.user.id
+            pieShopId: req.body.pieShopId
         }        
         
         pieService().createPie(pieFromRequest)
